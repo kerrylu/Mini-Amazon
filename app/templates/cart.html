@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div id="navbar">
+  <a href="{{ url_for('users.get_user_info') }}"  > Account Info</a>
+    <a href="{{ url_for('users.get_active_user_purchases') }}" >Purchases</a>
+    <a href="{{ url_for('users.all_users_details') }}" > Users Public View</a>
+    <a href="{{ url_for('userCart.cartPage') }}"  >See your cart</a>
+    <a href="{{ url_for('userCart.wishlistPage') }}"  >See your wishlist</a>
+    <a href="{{ url_for('inventory.edit_inventory') }}" >See your inventory</a>
+    <a href="{{ url_for('inventory.order_fulfillment') }}" >Fulfill Orders</a>
+    <a href="{{ url_for('review.my_reviews') }}">My Reviews</a>
+    <a href="{{ url_for('review.all_product_reviews') }}">All product reviews by author</a>
+    <a href="{{ url_for('review.all_seller_reviews') }}">All seller review by author</a>
+    <a href="{{ url_for('review.all_product_reviews_byproduct') }}">All product reviews by product</a>
+    <a href="{{ url_for('review.all_seller_reviews_byseller') }}">All seller reviews by seller</a>
+</div>
+<br><br><br><br><br>
+<form method="POST">
+  {%for field in form%}
+      <span> {{field}}</span>
+  {%endfor%}
+</form>
+
+<h2>Cart Contents:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col">Seller Name</th>
+      <th scope="col">Price Per Unit</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Total Price</th>
+      <th scope="col">Update Quantity</th>
+      <th scope="col">Delete Item</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cart in user_cart%}
+      <tr>
+        <td>{{cart.product_name}}</td>
+        <td>{{cart.seller_name}}</td>
+        <td>{{cart.price_per_unit}}</td>
+        <td>{{cart.quantity}}</td>
+        <td>{{cart.total_price}}</td>
+        <td><form action="{{ url_for('userCart.update_quantity', user_id=cart.user_id, seller_id=cart.seller_id, product_id=cart.product_id) }}" method="POST">
+          <label for="quantity">New Quantity:</label>
+          <input type="number" id="quantity" name="quantity" required step=1 min=1 >
+          <input type="submit" value="Update">
+        </form></td>
+        <td><form action="{{ url_for('userCart.delete_item', user_id=cart.user_id, seller_id=cart.seller_id, product_id=cart.product_id) }}" method="POST">
+          <button class = "button" type="submit">Delete</button>
+        </form></td>
+      </tr>
+    {% endfor %}
+    <h5 style="margin-top: 1%;">Total Price: <b>{{ total_price }}</b></h5>
+    <form action="{{ url_for('userCart.submit_order', user_id=current_user.id) }}" method="POST">
+        <button class = "btn btn-outline-success inner_button" type="submit">Submit Order</button>
+    </form>
+  </tbody>
+</table>
+
+{% endblock %}

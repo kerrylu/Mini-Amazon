@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="navbar">
+<a href="{{ url_for('users.get_user_info') }}"  > Account Info</a>
+<a href="{{ url_for('users.get_active_user_purchases') }}" >Purchases</a>
+<a href="{{ url_for('users.all_users_details') }}" > Users Public View</a>
+<a href="{{ url_for('userCart.cartPage') }}"  >See your cart</a>
+<a href="{{ url_for('userCart.wishlistPage') }}"  >See your wishlist</a>
+<a href="{{ url_for('inventory.edit_inventory') }}" >See your inventory</a>
+<a href="{{ url_for('inventory.order_fulfillment') }}" >Fulfill Orders</a>
+<a href="{{ url_for('review.my_reviews') }}">My Reviews</a>
+<a href="{{ url_for('review.all_product_reviews') }}">All product reviews by author</a>
+<a href="{{ url_for('review.all_seller_reviews') }}">All seller review by author</a>
+<a href="{{ url_for('review.all_product_reviews_byproduct') }}">All product reviews by product</a>
+<a href="{{ url_for('review.all_seller_reviews_byseller') }}">All seller reviews by seller</a>
+
+</div>
+
+<br><br>
+
+<p>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+</p>
+
+<br><br>
+
+<h2>Products for sale:</h2>
+
+<br>
+
+<form action="" method="post" novalidate>
+  {{ form.csrf_token }}
+  <p>
+    {{ form.search(size=32) }}
+    &nbsp
+    {{ form.searchOption.label }}
+    &nbsp
+    {{ form.searchOption }}
+    &nbsp
+  </p>
+  <p>
+    {{ form.sortBy.label }}
+    &nbsp
+    {{ form.sortBy }}
+    &nbsp &nbsp
+    {{ form.categoryChoice.label }}
+    &nbsp
+    {{ form.categoryChoice }}
+  </p>
+  <p>
+    {{ form.quantFilterChoice.label }}
+    &nbsp
+    {{ form.quantFilterChoice }}
+    &nbsp &nbsp
+    {{ form.priceFilterChoice }}
+  </p>
+  <p>
+    {{ form.submit }}
+  </p>
+</form>
+<br>
+
+{{ pagination.info }}
+{{ pagination.links }}
+<br>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Average Review</th>
+      <th scope="col">Available Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in avail_products%}
+      <tr>
+        <td><img src={{product.image}} width="100" height=auto></td>
+        <td><a href="{{ url_for('products.product_details', id = product.pid) }}">{{product.name}}</a></td>
+        <td>{{product.price}}</td>
+        <td>{{product.avg_review}}</td>
+        <td>{{product.avail_quantity}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{{ pagination.links }}
+
+{% endblock %}
+
+<style>
+  .pagination-page-info {
+    padding: .6em;
+    padding-left: 0;
+    width: 40em;
+    margin: .5em;
+    margin-left: 0;
+    font-size: 12px;
+  }
+</style>

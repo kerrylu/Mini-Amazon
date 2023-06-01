@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>All Reviews for Products Written by (ID)</h1>
+
+<p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</p>
+
+<a href="{{ url_for('index.index') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">Return to home</a>
+<a href="{{ url_for('review.all_seller_reviews') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">All seller reviews</a>
+
+
+<h2>Reviews:</h2>
+  
+  <form action="" method="post" novalidate>
+    {{ form.csrf_token }}
+    <p>
+      {{ form.n.label }}<br/>
+      {{ form.n(size=16) }}<br/>
+    </p>
+    <p>{{ form.submit() }}</p>
+  </form>
+
+
+{% if reviews %}
+<table class ='table table-hover table-bordered container'>
+    <thread class="thead-dark">
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Seller id</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Description</th>
+            <th scope="col">Review_Time</th>
+        </tr>
+    </thread>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{review.product_id}}</td>
+            <td>{{review.seller_id}}</td>
+            <td>{{review.rating}}</td>
+            <td>{{review.description}}</td>
+            <td>{{review.datetime}}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

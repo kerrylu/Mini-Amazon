@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="navbar">
+  <a href="{{ url_for('users.get_user_info') }}"  > Account Info</a>
+  <a href="{{ url_for('users.get_active_user_purchases') }}" >Purchases</a>
+  <a href="{{ url_for('users.all_users_details') }}" > Users Public View</a>
+  <a href="{{ url_for('userCart.cartPage') }}"  >See your cart</a>
+  <a href="{{ url_for('userCart.wishlistPage') }}"  >See your wishlist</a>
+  <a href="{{ url_for('inventory.edit_inventory') }}" >See your inventory</a>
+  <a href="{{ url_for('inventory.order_fulfillment') }}" >Fulfill Orders</a>
+  <a href="{{ url_for('review.my_reviews') }}">My Reviews</a>
+  <a href="{{ url_for('review.all_product_reviews') }}">All product reviews by author</a>
+  <a href="{{ url_for('review.all_seller_reviews') }}">All seller review by author</a>
+  <a href="{{ url_for('review.all_product_reviews_byproduct') }}">All product reviews by product</a>
+  <a href="{{ url_for('review.all_seller_reviews_byseller') }}">All seller reviews by seller</a>
+</div>
+
+<br><br>
+
+<br><br>
+
+<h2>Orders to be Fulfilled:</h2>
+
+<br>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Order ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Address</th>
+      <th scope="col">Date</th>
+      <th scope="col">Total Amount</th>
+      <th scope="col">Number of Items</th>
+      <th scope="col">Fulfilled?</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders%}
+      <tr>
+        <td><a href="{{ url_for('inventory.order_fulfill',order_id=order.oid)}}">{{order.oid}}</a></td>
+        <td>{{order.firstname}} {{order.lastname}}</td>
+        <td>{{order.address}}</td>
+        <td>{{order.orderdate}}</td>
+        <td>{{order.total}}</td>
+        <td>{{order.items}}</td>
+        <td>{{order.fulfill}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

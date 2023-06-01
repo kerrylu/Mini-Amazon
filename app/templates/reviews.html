@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Recent Reviews </h1>
+
+<p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</p>
+<a href="{{ url_for('index.index') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">Return to home</a>
+
+
+  <h2>5 Most Recent Reviews:</h2>
+  
+  <a href="{{ url_for('review.five_most_recent_product') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">5 most recent product reviews</a>
+
+  <a href="{{ url_for('review.five_most_recent_seller') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">5 most recent seller reviews</a>
+  <a href="{{ url_for('review.five_most_recent_seller') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">5 most recent seller reviews</a>
+
+
+{% endblock %}

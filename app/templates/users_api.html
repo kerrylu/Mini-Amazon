@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 style="text-align: center; padding-top:1%">Enter User ID to Access Purchase History</h2>
+
+
+<form method="POST" style="text-align: center; padding-top:1%" >
+    {%for field in form%}
+        <span> {{field}}</span>
+    {%endfor%}
+</form>
+
+{%if data%}
+<table style="width:95%; margin-top:3%; margin-left:2.5%" class="table .table-striped">
+<thead class="thead-dark">
+<tr>
+    <th> ID </th>
+    <th> Name </th>
+    <th> Category </th>
+    <th> Description </th>
+    <th> Price </th>
+    <th> Date Purchased </th>
+    <th> Image Link</th>
+</tr>
+</thead>
+{%for id, name, category, description, price, date, image in data%}
+<tr> 
+    <td> {{id}} </td> 
+    <td> {{name}} </td> 
+    <td> {{category}} </td> 
+    <td> {{description}} </td> 
+    <td> {{price}} </td> 
+    <td> {{date}} </td> 
+    <td> {{image}} </td> 
+</tr>
+{%endfor%}
+</table>
+{%endif%}
+
+
+{% endblock %}

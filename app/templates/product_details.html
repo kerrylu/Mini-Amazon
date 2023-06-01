@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="navbar">
+  <a href="{{ url_for('index.index') }}"> Home</a>
+  <a href="{{ url_for('users.get_user_info') }}"  > Account Info</a>
+  <a href="{{ url_for('users.get_active_user_purchases') }}" >Purchases</a>
+  <a href="{{ url_for('users.all_users_details') }}" > Users Public View</a>
+  <a href="{{ url_for('userCart.cartPage') }}"  >See your cart</a>
+  <a href="{{ url_for('userCart.wishlistPage') }}"  >See your wishlist</a>
+  <a href="{{ url_for('inventory.edit_inventory') }}" >See your inventory</a>
+  <a href="{{ url_for('inventory.order_fulfillment') }}" >Fulfill Orders</a>
+  <a href="{{ url_for('review.my_reviews') }}">My Reviews</a>
+  <a href="{{ url_for('review.all_product_reviews') }}">All product reviews by author</a>
+  <a href="{{ url_for('review.all_seller_reviews') }}">All seller review by author</a>
+</div>
+
+<br><br>
+<br><br><br>
+
+<header>
+    <h1>{{product.name}}</h1>
+</header>
+Category: {{product.category}}
+
+<br><br>
+
+<img src={{product.image}} width="200" height=auto>
+
+<br><br>
+
+<h4>Price:</h4>
+{{product.price}}
+
+<br><br>
+
+<h4>Description:</h4>
+{{product.description}}
+
+<br><br>
+<h4>Available Quantity:</h4>
+{% if sellers %}
+
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+      <tr>
+      <th scope="col">Seller Name</th>
+      <th scope="col">Available Quantity</th>
+      <th scope="col">Review Product</th>
+      <th scope="col">Review Seller</th>
+      <th scope="col">Add to Cart</th>
+      <th scope="col">Add to Wishlist</th>
+      </tr>
+  </thead>
+  <tbody> 
+    {% for seller in sellers %}
+      <tr>
+          <td><a href="{{ url_for('users.user_details', id = seller.sid)}}" role="button">{{seller.seller_firstname}} {{seller.seller_lastname}}</a></td>
+          <td>{{seller.quantity}}</td>
+          <td><a href="{{ url_for('review.product_review', sid = seller.sid, pid = product.pid)}}" role="button">Review Product</a></td>
+          <td><a href="{{ url_for('review.seller_review', sid = seller.sid)}}" role="button">Review Seller</a></td>
+          <td><form action="{{ url_for('products.add_to_cart', seller_id=seller.sid, product_id=product.pid, price=product.price) }}" method="POST">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required step=1 min=1 max={{seller.quantity}}>
+            <input type="submit" value="Add to Cart">
+          </form></td>
+          <td><form action="{{ url_for('products.add_to_wishlist', seller_id=seller.sid, product_id=product.pid, price=product.price) }}" method="POST">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required step=1 min=1 max={{seller.quantity}}>
+            <input type="submit" value="Add to Wishlist">
+          </form></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<br><br>
+<h4>Reviews:</h4>
+{% if reviews %}
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+      <tr>
+        <th scope="col">Image</th>
+        <th scope="col">Date/Time</th>
+        <th scope="col">Reviewer Name</th>
+        <th scope="col">Seller Name</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Upvotes</th>
+        <th scope="col">Description</th>
+      </tr>
+  </thead>
+  <tbody>
+    {% for review in reviews %}
+      <tr>
+        <td><a href="{{ url_for('review.show_image',  uid = review.user_id, pid = review.product_id)}}" >View Image</a></td>
+          <td>{{review.datetime}}</td>
+          <td>{{review.user_firstname}} {{review.user_lastname}}</td>
+          <td>{{review.seller_firstname}} {{review.seller_lastname}}</td>
+          <td>{{review.rating}}</td>
+          <td>
+            {{review.upvotes}}
+            <form action="{{ url_for('products.upvote_review', user_id=review.user_id, product_id=product.pid, seller_id=review.seller_id) }}" method="POST">
+              <input type="submit" value="Upvote">
+            </form>
+          </td>
+          <td>{{review.description}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

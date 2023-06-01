@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="navbar">
+  <a href="{{ url_for('users.get_user_info') }}"  > Account Info</a>
+    <a href="{{ url_for('users.get_active_user_purchases') }}" >Purchases</a>
+    <a href="{{ url_for('users.all_users_details') }}" > Users Public View</a>
+    <a href="{{ url_for('userCart.cartPage') }}"  >See your cart</a>
+    <a href="{{ url_for('userCart.wishlistPage') }}"  >See your wishlist</a>
+    <a href="{{ url_for('inventory.edit_inventory') }}" >See your inventory</a>
+    <a href="{{ url_for('inventory.order_fulfillment') }}" >Fulfill Orders</a>
+    <a href="{{ url_for('review.my_reviews') }}">My Reviews</a>
+    <a href="{{ url_for('review.all_product_reviews') }}">All product reviews by author</a>
+    <a href="{{ url_for('review.all_seller_reviews') }}">All seller review by author</a>
+    <a href="{{ url_for('review.all_product_reviews_byproduct') }}">All product reviews by product</a>
+    <a href="{{ url_for('review.all_seller_reviews_byseller') }}">All seller reviews by seller</a>
+</div>
+
+<br><br><br>
+
+<h1 style="padding-top:1%">Edit Inventory</h1>
+<a href="{{ url_for('inventory.add_new_product') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">Add New Product</a>
+<a href="{{ url_for('inventory.add_product') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">Add Existing Product to Inventory</a>
+<br><br>
+{{ pagination.info }}
+{{ pagination.links }}
+<h2>Products You Sell</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Update Quantity</th>
+      <th scope="col">Delete Item</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products%}
+      <tr>
+        <td><img src={{product.image}} width="100" height=auto></td>
+        <td><a href="{{ url_for('products.product_details', id = product.pid) }}">{{product.name}}</a></td>
+        <td>{{product.price}}</td>
+        <td>{{product.quantity}}</td>
+        <td><form action="{{ url_for('inventory.update_inventory_quantity', seller_id=sid, product_id=product.pid) }}" method="POST">
+          <label for="quantity">New Quantity:</label>
+          <input type="number" id="quantity" name="quantity" required step=1 min=1 >
+          <input type="submit" value="Update">
+        </form></td>
+        <td><form action="{{ url_for('inventory.delete_inventory_item', seller_id=sid, product_id=product.pid) }}" method="POST">
+          <button class = "button" type="submit">Delete</button>
+        </form></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{{ pagination.links }}
+
+{% endblock %}

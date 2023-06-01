@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+
+<a href="{{ url_for('index.index') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">Return to home</a>
+
+<h1 style="padding-top:1%">Remove Product</h1>
+<a href="{{ url_for('inventory.edit_inventory') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">Edit Inventory</a>
+
+<form action="" method="post" style="padding-top:1%" enctype = "multipart/form-data" novalidate>
+  {{form.csrf_token}}
+  <p>
+    {{ form.productID.label }}<br/>
+    {{ form.productID(size=32) }}<br/>
+  </p>
+  {{ form.submit(class_="btn btn-black") }}
+</form>
+
+{%if products%}
+<h2>Products sold by Seller {{sid}}</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product ID</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products%}
+      <tr>
+        <th>{{product.pid}}</th>
+        <td>{{product.name}}</td>
+        <td>{{product.quantity}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{%endif%}
+{% endblock %}

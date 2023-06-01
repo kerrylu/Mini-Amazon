@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+</p>
+
+<div id="navbar">
+  <a href="{{ url_for('users.get_user_info') }}"  > Account Info</a>
+    <a href="{{ url_for('users.get_active_user_purchases') }}" >Purchases</a>
+    <a href="{{ url_for('users.all_users_details') }}" > Users Public View</a>
+    <a href="{{ url_for('userCart.cartPage') }}"  >See your cart</a>
+    <a href="{{ url_for('userCart.wishlistPage') }}"  >See your wishlist</a>
+    <a href="{{ url_for('inventory.edit_inventory') }}" >See your inventory</a>
+    <a href="{{ url_for('inventory.order_fulfillment') }}" >Fulfill Orders</a>
+    <a href="{{ url_for('review.my_reviews') }}">My Reviews</a>
+    <a href="{{ url_for('review.all_product_reviews') }}">All product reviews by author</a>
+    <a href="{{ url_for('review.all_seller_reviews') }}">All seller review by author</a>
+    <a href="{{ url_for('review.all_product_reviews_byproduct') }}">All product reviews by product</a>
+    <a href="{{ url_for('review.all_seller_reviews_byseller') }}">All seller reviews by seller</a>
+</div>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
+<h1>My Reviews </h1>
+
+<a href="{{ url_for('index.index') }}" type="button" class="btn btn-dark" style="margin-bottom:10px">Return to home</a>
+
+
+<br><br>
+<h4>Product Reviews:</h4>
+{% if previews %}
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+      <tr>
+        <th scope="col">Image</th>
+        <th scope="col">Add Image</th>
+        <th scope="col">My User ID</th>
+        <th scope="col">Date/Time</th>
+        <th scope="col">Product ID</th>
+        <th scope="col">Seller ID</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Description</th>
+        <th scope="col">Upvotes</th>
+
+        
+
+        <th scope="col">Edit Review</th>
+        <th scope="col">Delete Review</th>
+      
+
+
+      </tr>
+  </thead>
+  <tbody>
+    {% for review in previews %}
+      <tr>
+          
+          <td><a href="{{ url_for('review.show_image',  uid = review.user_id, pid = review.product_id)}}" >View Image</a></td>
+          <td><a href="{{ url_for('review.upload_form', uid = review.user_id, pid = review.product_id)}}" >Add/Update Image</a></td>
+          
+          <td>{{review.user_id}}</td>
+          <td>{{review.datetime}}</td>
+          <td>{{review.product_id}}</td>
+          <td>{{review.seller_id}} </td>
+          <td>{{review.rating}}</td>
+          <td>{{review.description}}</td>
+          <td>{{review.upvotes}}</td>
+
+          <td><a href="{{ url_for('review.update_product_review', uid = review.user_id, pid = review.product_id, sid = review.seller_id)}}" role="button">Edit Review</a></td>
+          <td><a href="{{ url_for('review.delete_product_review', uid = review.user_id, pid = review.product_id, sid = review.seller_id)}}" role="button">Delete Review</a></td>
+
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<br><br>
+<h4>Seller Reviews:</h4>
+{% if sreviews %}
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+        <tr>
+          <th scope="col">My User ID</th>
+          <th scope="col">Date/Time</th>
+          <th scope="col">Seller ID</th>
+          <th scope="col">Rating</th>
+          <th scope="col">Description</th>
+          <th scope="col">Upvotes</th>
+          <th scope="col">Edit Review</th>
+        <th scope="col">Delete Review</th>
+  
+        </tr>
+    </thead>
+    <tbody>
+      {% for review in sreviews %}
+        <tr>
+          <td>{{review.user_id}}</td>
+            <td>{{review.datetime}}</td>
+            <td>{{review.seller_id}} </td>
+            <td>{{review.rating}}</td>
+            <td>{{review.description}}</td>
+            <td>{{review.upvotes}}</td>
+  
+            <td><a href="{{ url_for('review.update_seller_review', uid = review.user_id, sid = review.seller_id)}}" role="button">Edit Review</a></td>
+            <td><a href="{{ url_for('review.delete_seller_review', uid = review.user_id, sid = review.seller_id)}}" role="button">Delete Review</a></td>
+  
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+
+{% endblock %}

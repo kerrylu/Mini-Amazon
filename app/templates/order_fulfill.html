@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="navbar">
+  <a href="{{ url_for('users.get_user_info') }}"  > Account Info</a>
+  <a href="{{ url_for('users.get_active_user_purchases') }}" >Purchases</a>
+  <a href="{{ url_for('users.all_users_details') }}" > Users Public View</a>
+  <a href="{{ url_for('userCart.cartPage') }}"  >See your cart</a>
+  <a href="{{ url_for('userCart.wishlistPage') }}"  >See your wishlist</a>
+  <a href="{{ url_for('inventory.edit_inventory') }}" >See your inventory</a>
+  <a href="{{ url_for('inventory.order_fulfillment') }}" >Fulfill Orders</a>
+  <a href="{{ url_for('review.my_reviews') }}">My Reviews</a>
+  <a href="{{ url_for('review.all_product_reviews') }}">All product reviews by author</a>
+  <a href="{{ url_for('review.all_seller_reviews') }}">All seller review by author</a>
+  <a href="{{ url_for('review.all_product_reviews_byproduct') }}">All product reviews by product</a>
+  <a href="{{ url_for('review.all_seller_reviews_byseller') }}">All seller reviews by seller</a>
+</div>
+
+<br><br>
+
+<br><br>
+
+<h2>Order #{{order_id}} for {{userInfo.firstname}} {{userInfo.lastname}}</h2>
+
+<br>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Fulfilled?</th>
+      <th scope="col">Fulfill Item</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in lineItems%}
+      <tr>
+        <td>{{item.productName}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.fulfill}}</td>
+        <td><form action="{{ url_for('inventory.fulfill_item', order_id= item.oid, product_id=item.pid) }}" method="POST">
+          <button class = "button" type="submit">Fulfill</button>
+        </form></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

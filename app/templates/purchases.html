@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div id="navbar">
+    <a href="{{ url_for('users.get_user_info') }}"  > Account Info</a>
+    <a href="{{ url_for('users.get_active_user_purchases') }}" >Purchases</a>
+    <a href="{{ url_for('users.all_users_details') }}" > Users Public View</a>
+    <a href="{{ url_for('userCart.cartPage') }}"  >See your cart</a>
+    <a href="{{ url_for('userCart.wishlistPage') }}"  >See your wishlist</a>
+    <a href="{{ url_for('inventory.edit_inventory') }}" >See your inventory</a>
+    <a href="{{ url_for('inventory.order_fulfillment') }}" >Fulfill Orders</a>
+    <a href="{{ url_for('review.my_reviews') }}">My Reviews</a>
+    <a href="{{ url_for('review.all_product_reviews') }}">All product reviews by author</a>
+    <a href="{{ url_for('review.all_seller_reviews') }}">All seller review by author</a>
+    <a href="{{ url_for('review.all_product_reviews_byproduct') }}">All product reviews by product</a>
+    <a href="{{ url_for('review.all_seller_reviews_byseller') }}">All seller reviews by seller</a>
+</div>
+    
+<br><br>
+<br><br><br>
+
+{%if data%}
+<form action="" method="post" novalidate>
+    {{ sortForm.csrf_token }}
+    <p>
+        <h1>Sort Purhcases</h1>
+
+        <span id='list' >{{ sortForm.sortBy() }}</span>
+        <span id='sort-' >{{ sortForm.submit() }}</span>
+    </p>
+</form>
+<table style="width:95%; margin-top:3%; margin-left:2.5%" class="table .table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th> Order ID </th>
+        <th> Total Amount </th>
+        <th> Quantity </th>
+        <th> Date Fulfilled </th>
+    </tr>
+    </thead>
+    {%for id,order_total,num_products,order_fulfilled_datetime in data%}
+    <tr> 
+        <td> <a href = "{{url_for('users.order_detail',id=id)}}">{{id}}</a>  </td> 
+        <td> {{order_total}} </td> 
+        <td> {{num_products}} </td> 
+        <td>
+            {%if order_fulfilled_datetime %}
+                {{order_fulfilled_datetime}}
+            {%else%}
+                Being Processed
+            {%endif%}
+        </td>
+        
+        
+    </tr>
+    {%endfor%}
+</table>
+
+    <script type='text/javascript'>
+        const btn = document.getElementById('submit');
+        btn.className+= "btn btn-success";
+        /*const list = document.getElementById('sortBy');
+        options = list.children;
+        for(i = 0; i<options.length; i++){
+            options[i].className+= "dropdown-item";
+        }
+        console.log(list)*/
+        
+    </script>
+{%else%}
+    
+    <h1> No purchases made</h1>
+    
+{%endif%}
+
+
+
+{% endblock %}
+
